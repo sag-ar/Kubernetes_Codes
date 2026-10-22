@@ -14,7 +14,7 @@ if ! command -v docker &>/dev/null; then
   sudo yum install -y docker
 
   echo "👤 Adding current user to docker group..."
-  sudo groupadd docker
+  
   sudo usermod -aG docker "$USER"
   newgrp docker
   
