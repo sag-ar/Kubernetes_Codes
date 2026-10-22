@@ -9,11 +9,23 @@ spec:
   containers:
     - name: nginx-container
       image: nginx:latest
+      env:
+        - name: DB_USER
+          value: "admin"
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
       ports:
         - containerPort: 80
+          protocol: TCP
+          hostPort: 8080
       volumeMounts:
         - name: nginx-volume
-          mountPath: /usr/share/nginx/html  
+          mountPath: /usr/share/nginx/html
   volumes:
     - name: nginx-volume
       emptyDir: {}          
