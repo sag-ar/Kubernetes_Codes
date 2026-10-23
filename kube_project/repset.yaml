@@ -1,0 +1,34 @@
+apiVersion: apps/v1 
+kind: ReplicaSet
+metadata:
+  name: nginx-rs
+  labels:
+    type: demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      env: prod
+    matchExpressions:
+      - key: release
+        operator: In
+        values: ["v1.01"]
+  template:
+    metadata:
+      name: nginx-pod
+      labels:
+        env: prod
+        release: v1.01
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - name: shared-data
+              mountPath: /var/www/html
+      volumes:
+        - name: shared-data
+          emptyDir: {}
