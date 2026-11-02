@@ -7,7 +7,7 @@ spec:
     - name: alpine-container
       image: alpine:latest
       command: ["/bin/sh"]
-      args: ["-c", "while true; do echo 'Hello from Alpine!' > /mnt/shared/index.html; sleep 5; done"]
+      args: ["-c", "while true; do echo 'Hello from Alpine!' >> /mnt/shared/index.html; sleep 5; done"]
       volumeMounts:
         - name: shared-volume
           mountPath: /mnt/shared
@@ -15,8 +15,6 @@ spec:
       image: nginx:latest
       ports:
         - containerPort: 80
-          protocol: TCP
-          hostPort: 8080
       volumeMounts:
         - name: shared-volume
           mountPath: /usr/share/nginx/html

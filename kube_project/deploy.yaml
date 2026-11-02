@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: nginx
+      env: prod
+  template:
+    metadata:
+      labels: 
+        app: nginx
+        env: prod
+    spec:
+      containers:
+        - name: alpine-container
+          image: alpine:latest
+          command: ["/bin/sh"]
+          args: ["-c", "while true; do echo 'Hello from Alpine!' >> /mnt/shared/index.html; sleep 5; done"]
+          volumeMounts:
+            - name: shared-volume
+              mountPath: /mnt/shared
+        - name: nginx-container
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: shared-volume
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: shared-volume
+          emptyDir: {}
