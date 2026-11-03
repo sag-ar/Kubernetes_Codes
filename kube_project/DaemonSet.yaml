@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-daemon
+  labels:
+    type: production
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+      env: prod
+  template:
+    metadata:
+      labels:
+        app: nginx
+        env: prod
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - name: shared-data
+              mountPath: /var/www/html
+      volumes:
+        - name: shared-data
+          emptyDir: {} 
