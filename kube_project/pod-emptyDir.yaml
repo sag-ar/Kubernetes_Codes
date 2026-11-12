@@ -1,0 +1,26 @@
+apiVersion : v1
+kind: Pod
+metadata:
+  name: shared-volume-pod
+spec:
+  containers:
+    - name: alpine-container
+      image: alpine:latest
+      command: ["/bin/sh"]
+      args: ["-c", "while true; do echo 'Hello from Alpine!' >> /mnt/shared/index.html; sleep 5; done"]
+      volumeMounts:
+        - name: shared-volume
+          mountPath: /mnt/shared
+    - name: nginx-container
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: shared-volume
+          mountPath: /usr/share/nginx/html
+  volumes:
+    - name: shared-volume
+      emptyDir:
+        medium: Memory #we can choose memory or disk by default it's disk memory - tmpfs RAm
+        sizeLimit: 200Mi
+        #mode defines dir permissions
